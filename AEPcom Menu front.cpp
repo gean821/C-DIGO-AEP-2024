@@ -6,7 +6,7 @@
 #include <ctype.h>
 #include<locale.h>
 
-// FunÁ„o para posicionar o cursor no terminal
+                 // Fun√ß√£o para posicionar o cursor no terminal
 void gotoxy(int x, int y) {
     COORD coord;
     coord.X = x;
@@ -21,14 +21,14 @@ void reset_color() {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x07); // Branco no fundo preto
 }
 
-// FunÁ„o para exibir o menu
+// Fun√ß√£o para exibir o menu
 void print_menu(int highlight, const char *choices[], int n_choices) {
     
 
     system("cls");  // Limpa a tela
 
-    // Desenha as bordas do menu
-    gotoxy(8, 3);  // PosiÁ„o para o topo do menu
+    // Desenha bordas do menu
+    gotoxy(8, 3);  // Posi√ß√£o para o topo do menu
     set_color(15, 0);
     printf("|-------------------------|\n");
     
@@ -40,34 +40,33 @@ void print_menu(int highlight, const char *choices[], int n_choices) {
     set_color(15, 0);
     printf("|-------------------------|\n");
 
-    // Exibe as opÁıes do menu com espaÁamento adequado
+                               // Exibe as op√ß√µes do menu com espa√ßamento certo
     for (int i = 0; i < n_choices; ++i) {
-        gotoxy(8, 6 + i);  // Posiciona o cursor para cada opÁ„o
+        gotoxy(8, 6 + i);  
         if (highlight == i) {
         	set_color(15, 0);
-            // Destaca a opÁ„o selecionada com setas
+                                         // setas para a posi√ß√£o selecionada
             printf("|  > %-21s|\n", choices[i]);
         } else {
             printf("|    %-21s|\n", choices[i]);
         }
     }
 
-    // Exibe a borda inferior do menu
+                 // Exibe a borda inferior do menu
     gotoxy(8, 6 + n_choices);
     set_color(15, 0);
     printf("|-------------------------|\n");
 
-	gotoxy(8, 15 + n_choices + 1);  // Coloca a frase logo abaixo do menu
-    set_color(7, 0);  // Cor padr„o para o texto da frase
+	gotoxy(8, 15 + n_choices + 1);  
+    set_color(7, 0);  
     printf("USE AS SETAS PARA NAVEGAR E ENTER PARA SELECIONAR\n");
 }
 
 
 
-// FunÁ„o para criptografar a senha (simples deslocamento de caracteres)
 void criptografar_senha(const char *senha, char *senha_cripto) {
     for (int i = 0; senha[i] != '\0'; i++) {
-        senha_cripto[i] = senha[i] + 3;  // Desloca cada caractere em 3 posiÁıes
+        senha_cripto[i] = senha[i] + 3;  // Desloca cada caractere em 3 posi√ß√µes
     }
     senha_cripto[strlen(senha)] = '\0'; // Adiciona o caractere nulo ao final
 }
@@ -87,14 +86,14 @@ int verificarSenha(const char *senha) {
         if (ispunct(senha[i])) temEspecial++;
     }
     if (temMaiusc && temNumero && temEspecial) {
-        return 1; // Senha no padr„o
+        return 1; // Senha no padr√£o
     } else {
     	set_color(6,0);
         printf("Senha deve ter:\n");
         reset_color();
         set_color(4,0);
-        if (!temMaiusc) printf("- Pelo menos um caractere mai˙sculo.\n");
-        if (!temNumero) printf("- Pelo menos um n˙mero.\n");
+        if (!temMaiusc) printf("- Pelo menos um caractere mai√∫sculo.\n");
+        if (!temNumero) printf("- Pelo menos um n√∫mero.\n");
         if (!temEspecial) printf("- Pelo menos um caractere especial.\n");
         reset_color();
         return 0; // Senha fraca
@@ -102,20 +101,20 @@ int verificarSenha(const char *senha) {
 }
 
 void cadastrarUsuario(const char *nome, const char *senha) {
-    FILE *arquivo = fopen("usuarios.txt", "a");  // Usar "a" para adicionar sem sobrescrever
+    FILE *arquivo = fopen("usuarios.txt", "a"); 
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
     }
 
-    char senha_cripto[50];  // Vari·vel para armazenar a senha criptografada
-    criptografar_senha(senha, senha_cripto);  // Criptografa a senha
+    char senha_cripto[50];  
+    criptografar_senha(senha, senha_cripto);  
 
     // Adiciona o nome e a senha criptografada no arquivo
-    fprintf(arquivo, "%s %s\n", nome, senha_cripto);  // O formato de armazenamento deve ser "nome senha_cripto"
+    fprintf(arquivo, "%s %s\n", nome, senha_cripto);  
     fclose(arquivo);
  	set_color(2,0);
-    printf("\nUSU¡RIO CADASTRADO COM SUCESSO.\n");
+    printf("\nUSU√ÅRIO CADASTRADO COM SUCESSO.\n");
     Beep(2000,500);
     reset_color();
 }
@@ -123,7 +122,7 @@ void cadastrarUsuario(const char *nome, const char *senha) {
 void listarUsuarios() {
     FILE *arquivo = fopen("usuarios.txt", "r");  // Abre o arquivo para leitura
     if (arquivo == NULL) {
-        printf("Nenhum usu·rio cadastrado.\n");
+        printf("Nenhum usu√°rio cadastrado.\n");
         return;
     }
 
@@ -133,8 +132,8 @@ void listarUsuarios() {
     printf("USUARIOS CADASTRADOS:\n");
     reset_color();
 
-    while (fgets(linha, sizeof(linha), arquivo)) { // LÍ a linha inteira
-        sscanf(linha, "%49s %49s", nome, senha_cripto); // Separa os campos
+    while (fgets(linha, sizeof(linha), arquivo)) { 
+        sscanf(linha, "%49s %49s", nome, senha_cripto); 
         printf("Nome: %s -> Senha criptografada: %s\n", nome, senha_cripto);
     }
 
@@ -152,7 +151,7 @@ void excluirUsuario(const char *nome) {
 
     FILE *temp = fopen("temp.txt", "w");
     if (temp == NULL) {
-        printf("Erro ao abrir o arquivo tempor·rio.\n");
+        printf("Erro ao abrir o arquivo tempor√°rio.\n");
         fclose(arquivo);
         return;
     }
@@ -172,36 +171,36 @@ void excluirUsuario(const char *nome) {
 
     if (encontrado) {
     	set_color(4,0);
-        printf("\nDeseja excluir este usu·rio? (Digite 'Sim' para confirmar e 'Nao' para cancelar):\n ");
+        printf("\nDeseja excluir este usu√°rio? (Digite 'Sim' para confirmar e 'Nao' para cancelar):\n ");
         reset_color();
         scanf("%49s", escolha);
         if (strcmp(escolha, "Sim") == 0) {
             remove("usuarios.txt");
-            rename("temp.txt", "usuarios.txt"); // Renomeia o arquivo tempor·rio para o original
+            rename("temp.txt", "usuarios.txt"); // Renomeia o arquivo tempor√°rio para o original
             set_color(2,0);
-            printf("\nUSU¡RIO EXCLUÕDO COM SUCESSO.\n");
+            printf("\nUSU√ÅRIO EXCLU√çDO COM SUCESSO.\n");
             Beep(2000,500);
 			reset_color();    
         } else if (strcmp(escolha, "Nao") == 0) {
-            remove("temp.txt");  // N„o faz a substituiÁ„o, apaga o arquivo tempor·rio
+            remove("temp.txt");  // N√£o faz a substitui√ß√£o, apaga o arquivo tempor√°rio
             set_color(2,0);
-            printf("\nOPERA«√O DE EXCLUS√O CANCELADA.\n");
+            printf("\nOPERA√á√ÉO DE EXCLUS√ÉO CANCELADA.\n");
             reset_color();
         }
     } else {
-        remove("temp.txt");  // Remove o arquivo tempor·rio se o usu·rio n„o foi encontrado
+        remove("temp.txt");  // Remove o arquivo tempor√°rio se o usu√°rio n√£o foi encontrado
         set_color(4,0);
-        printf("\nUsu·rio n„o encontrado, pressione ENTER para tentar novamente\n");
+        printf("\nUsu√°rio n√£o encontrado, pressione ENTER para tentar novamente\n");
         reset_color();
 		getchar();
         system("cls");
         listarUsuarios();
-        printf("\nInforme o nome do usu·rio a ser excluÌdo: ");
+        printf("\nInforme o nome do usu√°rio a ser exclu√≠do: ");
         char novoNome[50];
         fgets(novoNome, sizeof(novoNome), stdin);
         novoNome[strcspn(novoNome, "\n")] = '\0';
 
-        // Chama a funÁ„o novamente com o novo nome
+        
         excluirUsuario(novoNome);  
     }
 }
@@ -215,7 +214,7 @@ void alterarUsuario(const char *nome) {
 
     FILE *temp = fopen("temp.txt", "w");
     if (temp == NULL) {
-        printf("Erro ao abrir o arquivo tempor·rio.\n");
+        printf("Erro ao abrir o arquivo tempor√°rio.\n");
         fclose(arquivo);
         return;
     }
@@ -226,10 +225,10 @@ void alterarUsuario(const char *nome) {
         if (strcmp(nomeUsuario, nome) == 0) {
             encontrado = 1;
             set_color(3,0);
-            printf("Usu·rio encontrado.\n");
+            printf("Usu√°rio encontrado.\n");
             reset_color();
 
-            // Solicita novas informaÁıes
+           
             char novoNome[50], novaSenha[50];
             set_color(3,0);
             printf("Informe o novo nome (ou pressione Enter para manter o atual): ");
@@ -238,7 +237,7 @@ void alterarUsuario(const char *nome) {
             novoNome[strcspn(novoNome, "\n")] = '\0'; // Remove o '\n'
 
             if (strlen(novoNome) == 0) {
-                strcpy(novoNome, nomeUsuario); // MantÈm o nome atual
+                strcpy(novoNome, nomeUsuario); // Mant√©m o nome atual
             }
 			set_color(3,0);
             printf("Informe a nova senha: ");
@@ -249,10 +248,10 @@ void alterarUsuario(const char *nome) {
             char senha_cripto_nova[50];
             criptografar_senha(novaSenha, senha_cripto_nova); // Criptografa a nova senha
 
-            // Salva as alteraÁıes no arquivo tempor·rio
+            // Salva as altera√ß√µes no arquivo tempor√°rio
             fprintf(temp, "%s %s\n", novoNome, senha_cripto_nova);
         } else {
-            // Copia os dados n„o alterados para o arquivo tempor·rio
+            // Copia os dados n√£o alterados para o arquivo tempor√°rio
             fprintf(temp, "%s %s\n", nomeUsuario, senha_cripto);
         }
     }
@@ -264,11 +263,11 @@ void alterarUsuario(const char *nome) {
         remove("usuarios.txt");
         rename("temp.txt", "usuarios.txt");
         set_color(2,0);
-        printf("USU¡RIO ALTERADO COM SUCESSO.\n");
+        printf("USU√ÅRIO ALTERADO COM SUCESSO.\n");
         reset_color();
     } else {
     	set_color(4,0);
-        printf("USU¡RIO N√O ENCONTRADO.\n");
+        printf("USU√ÅRIO N√ÉO ENCONTRADO.\n");
         reset_color();
         remove("temp.txt");
     }
@@ -277,13 +276,13 @@ void alterarUsuario(const char *nome) {
 void mostrarCreditos() {
 	system("cls");
 	set_color(4,0);
-    printf("\n----- CrÈditos -----\n");
+    printf("\n----- Cr√©ditos -----\n");
     reset_color();
     printf("Desenvolvedores: Gean Luca, Adriano Mota e Gabriel Bott.\n");
-    printf("Projeto: Sistema de Cadastro de Usu·rios\n");
+    printf("Projeto: Sistema de Cadastro de Usu√°rios\n");
     printf("Tecnologias usadas: C, Banco de Dados txt simples e Criptografia de Senha.\n");
     printf("Data de desenvolvimento: 08/11/24 -- 11/11/24\n");
-    printf("Vers„o: 1.0\n");
+    printf("Vers√£o: 1.0\n");
     printf("Agradecimentos: Agradecemos aos professores Alexandre Moreno e Erinaldo por nos ajudarem e nos incentivarem a fazer este projeto.\n");
     printf("---------------------\n");
 }
@@ -297,9 +296,9 @@ int main() {
     const char *choices[] = { 
 		"CADASTRAR USUARIO",
         "LISTAR USUARIOS ",
-		"ALTERAR USU¡RIO ",       
+		"ALTERAR USU√ÅRIO ",       
 		"EXCLUIR USUARIOS",
-		"CR…DITOS",
+		"CR√âDITOS",
         "SAIR",
     };
     int n_choices = sizeof(choices) / sizeof(choices[0]);
@@ -307,18 +306,18 @@ int main() {
     char nome[50][20];
     char senha[50][20];
     char senha_confirmacao[50];
-    char senha_cripto[50];  // Armazenar· a senha criptografada
+    char senha_cripto[50];  // Armazenar√° a senha criptografada
 
     // Exibir o menu inicialmente
     print_menu(highlight, choices, n_choices);
 
     
     while (1) {
-    // Exibe o menu inicialmente
+    
     print_menu(highlight, choices, n_choices);
     ch = _getch();  // Captura a tecla pressionada
 
-    // Verifica qual opÁ„o o usu·rio selecionou
+    
     switch (ch) {
         case 72: // Seta para cima
             if (highlight == 0) 
@@ -348,7 +347,7 @@ int main() {
 	
 	}
 
-    // Se a opÁ„o foi selecionada (Enter pressionado), executa a aÁ„o
+    // Se a op√ß√£o foi selecionada (Enter pressionado), executa a a√ß√£o
     if (choice != -1) {
         Beep(450,300);
 		break;
@@ -362,7 +361,7 @@ int main() {
     	set_color(3,0);
     	printf("INFORME SEU NOME :\n");
     	reset_color();
-    	fgets(nome[0], sizeof(nome[0]), stdin);  // Usa fgets para capturar o nome com espaÁos
+    	fgets(nome[0], sizeof(nome[0]), stdin);  
     	nome[0][strcspn(nome[0], "\n")] = '\0';   // Remove o '\n' no final, se presente
 
     	int tamanho = strlen(nome[0]);  
@@ -376,7 +375,7 @@ int main() {
         	printf("INFORME SEU NOME :\n");
         	reset_color();
         	fgets(nome[0], sizeof(nome[0]), stdin);  
-        	nome[0][strcspn(nome[0], "\n")] = '\0';   // Remove o '\n' 
+        	nome[0][strcspn(nome[0], "\n")] = '\0';   
         	tamanho = strlen(nome[0]);  
     	}
 		
@@ -396,16 +395,16 @@ int main() {
             	if (strcmp(senha[0], senha_confirmacao) == 0) {
                 	cadastrarUsuario(nome[0], senha[0]);
                 	int sleep(1000);
-                	senhaValida = 1;                         // Senha e confirmaÁ„o est„o corretas, podemos sair do loop
+                	senhaValida = 1;                         // Senha e confirma√ß√£o est√£o corretas, podemos sair do loop
             	}else{
                 set_color(4,0);
-				printf("Senha informada est· diferente, informe novamente.\n");
+				printf("Senha informada est√° diferente, informe novamente.\n");
 				getch();
 				system("cls");
             	}reset_color();
         	}	else {
         			set_color(4,0);
-            		printf("Senha n„o atende aos requisitos. Tente novamente.\n");
+            		printf("Senha n√£o atende aos requisitos. Tente novamente.\n");
             		getch();
             		system("cls");
         		}	reset_color();
@@ -433,7 +432,7 @@ int main() {
 	} else if (choice == 3) { 
         system("cls");
         listarUsuarios();
-        printf("\nINFORME O NOME DO USU¡RIO A SER EXCLUÕDO:\n");
+        printf("\nINFORME O NOME DO USU√ÅRIO A SER EXCLU√çDO:\n");
 		fgets(nome[0], sizeof(nome[0]), stdin);
         nome[0][strcspn(nome[0], "\n")] = '\0';
         excluirUsuario(nome[0]);
@@ -456,7 +455,7 @@ int main() {
         print_menu(highlight, choices, n_choices);  // Mostra o menu novamente
         choice = -1;
     } else {
-        printf("OpÁ„o inv·lida. Digite 'sim' ou 'nao'.\n");
+        printf("Op√ß√£o inv√°lida. Digite 'sim' ou 'nao'.\n");
         getch();
 		system("cls");
         
@@ -466,7 +465,7 @@ int main() {
     	system("cls");
     	listarUsuarios();
     	set_color(3,0);
-    	printf("\nINFORME O NOME DO USU¡RIO A SER ALTERADO:\n");
+    	printf("\nINFORME O NOME DO USU√ÅRIO A SER ALTERADO:\n");
     	reset_color();
     	fgets(nome[0], sizeof(nome[0]), stdin);
     	nome[0][strcspn(nome[0], "\n")] = '\0';
